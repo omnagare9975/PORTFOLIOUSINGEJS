@@ -34,8 +34,8 @@ jobs:
                 run: |
                   ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << 'EOF'
                    cd /home/${{ secrets.EC2_USERNAME }}/app
-                   npm install
-                   pm2 restart app || pm2 start index.js --name app
+                   /home/ubuntu/.nvm/versions/node/v18.20.8/bin/npm install
+                   /home/ubuntu/.nvm/versions/node/v18.20.8/bin/pm2 restart app || /home/ubuntu/.nvm/versions/node/v18.20.8/bin/pm2 start index.js --name app
                   EOF
             
                 
