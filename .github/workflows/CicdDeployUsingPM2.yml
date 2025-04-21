@@ -1,45 +1,45 @@
-name: deploy the node js app on the EC2
+# name: deploy the node js app on the EC2
 
 
-on:
-   push:
-    branches: 
-        - main
+# on:
+#    push:
+#     branches: 
+#         - main
 
-jobs: 
-    deploy:
-        name: clone the repo
-        runs-on: ubuntu-latest
-        steps:
-              - name: clone the repo
-                uses: actions/checkout@v3
+# jobs: 
+#     deploy:
+#         name: clone the repo
+#         runs-on: ubuntu-latest
+#         steps:
+#               - name: clone the repo
+#                 uses: actions/checkout@v3
               
-              - name: setup the node
-                uses: actions/setup-node@v3
-                with:
-                  node-version: '18'
+#               - name: setup the node
+#                 uses: actions/setup-node@v3
+#                 with:
+#                   node-version: '18'
 
-              - name: install the dependencies
-                run: npm install
+#               - name: install the dependencies
+#                 run: npm install
             
-              - name: Add SSH Key
-                run: |
-                  echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-                  chmod 600 key.pem
-              - name: Copy files to EC2
-                run: |
-                  rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./ ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/app
+#               - name: Add SSH Key
+#                 run: |
+#                   echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+#                   chmod 600 key.pem
+#               - name: Copy files to EC2
+#                 run: |
+#                   rsync -avz -e "ssh -i key.pem -o StrictHostKeyChecking=no" ./ ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USERNAME }}/app
             
-              - name: Restart app using PM2
-                run: |
-                  ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << EOF
-                   export NVM_DIR="\$HOME/.nvm"
-                   [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
-                   nvm use 18
-                   cd /home/${{ secrets.EC2_USERNAME }}/app
-                   npm install
-                   pm2 restart app || pm2 start index.js --name app
-                  EOF
+#               - name: Restart app using PM2
+#                 run: |
+#                   ssh -i key.pem -o StrictHostKeyChecking=no ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} << EOF
+#                    export NVM_DIR="\$HOME/.nvm"
+#                    [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+#                    nvm use 18
+#                    cd /home/${{ secrets.EC2_USERNAME }}/app
+#                    npm install
+#                    pm2 restart app || pm2 start index.js --name app
+#                   EOF
             
                 
                 
