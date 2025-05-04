@@ -1,6 +1,9 @@
 version: '3.8'
 services:
     web:
-      image: omnagare/portfolioapp:latest
+      container_name: 'nodeapp'
+      build: .
       ports:
-       - "8080:8080"
+         - "9000:9000"
+
+      
